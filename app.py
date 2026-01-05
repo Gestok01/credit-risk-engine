@@ -65,7 +65,7 @@ if st.button("Evaluate Risk"):
     input_df = pd.DataFrame([{
         "num_late_payments": num_late_payments,
         "avg_delay": avg_delay,
-        "credit_utilization": credit_utilisation,
+        "credit_utilisation": credit_utilisation,
         "payment_ratio": payment_ratio,
         "high_risk_flag": high_risk_flag,
         "LIMIT_BAL": limit_bal,
