@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import List,Dict
+
 
 class CreditRequest(BaseModel):
     num_late_payments: int
@@ -14,3 +16,12 @@ class CreditResponse(BaseModel):
     probability_of_default: float
     risk_band: str
     decision: str
+
+class ExplainResponse(BaseModel):
+     default_prediction: int 
+     probability_of_default: float
+     risk_band: str
+     decision: str
+     top_reasons:List[str]
+     model:Dict[str,str]
+
