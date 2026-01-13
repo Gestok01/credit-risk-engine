@@ -1,6 +1,7 @@
 import numpy as np
 from src.model import model, FEATURE_ORDER
 
+
 FEATURE_LABELS = {
     "num_late_payments": "Many late payments",
     "avg_delay": "High average delay",
@@ -16,7 +17,6 @@ def explain_prediction(features: dict, top_k: int = 3):
     Explain prediction using logistic regression coefficients
     """
 
-    # ✅ Correct pipeline access
     classifier = model.named_steps["model"]
 
     coefs = classifier.coef_[0]
