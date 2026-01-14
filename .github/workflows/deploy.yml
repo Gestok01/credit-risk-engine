@@ -19,8 +19,16 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
+          request_pty: true
+          script_stop: true
           script: |
-            cd ~/credit-risk-engine
+            set -e
+            whoami
+            pwd
+            ls -la
+
+            cd /home/ec2-user/credit-risk-engine
+
             git pull origin main
 
             docker stop credit-risk-engine || true
@@ -28,6 +36,6 @@ jobs:
 
             docker build -t credit-risk-engine:latest .
             docker run -d \
-            --name credit-risk-engine \
-            -p 8000:8000 \
-            credit-risk-engine:latest
+             --name credit-risk-engine \
+             -p 8000:8000 \
+             credit-risk-engine:latest
