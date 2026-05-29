@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.schemas import CreditRequest, CreditResponse , ExplainResponse
+from src.schemas import CreditRequest, CreditResponse , ExplainResponse, ComplianceResponse
 from src.model import predict_risk
 from src.services.risk_service import assess_risk, make_decision
 from src.config import MODEL_METADATA
@@ -9,6 +9,8 @@ from src.monitoring.drift_service import detect_drift
 from src.audit.audit_logger import log_decision
 from src.services.retraining_service import evaluate_retraining
 from src.audit.audit_logger import log_retraining_decision
+from src.compliance.rag_service import vector_db
+from src.compliance.auditor_agent import run_compliance_audit
 import pandas as pd
 
 app = FastAPI(title="Credit Risk API")
@@ -117,3 +119,13 @@ def retraining_check(payload: dict):
     log_retraining_decision(payload, decision)
 
     return decision
+
+@app.post("/compliance/seed")
+def seed_compliance():
+    count = vector_db.seed_database()
+    return {"status": "SUCCESS", "message": f"Successfully seeded {count} rules into the compliance vector store."}
+
+@app.post("/compliance/audit", response_model=ComplianceResponse)
+def audit_compliance():
+    audit_results = run_compliance_audit()
+    return audit_results

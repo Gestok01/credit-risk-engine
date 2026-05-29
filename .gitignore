@@ -6,4 +6,5 @@ __pycache__/
 *.pyc
 .env
 logs/
-
+data/compliance_chroma/
+*.log

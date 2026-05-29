@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List,Dict
+from typing import List, Dict, Any
 
 
 class CreditRequest(BaseModel):
@@ -24,4 +24,14 @@ class ExplainResponse(BaseModel):
      decision: str
      top_reasons:List[str]
      model:Dict[str,str]
+
+class ComplianceResponse(BaseModel):
+    status: str
+    audit_summary: str
+    compliance_status: str = "UNKNOWN"
+    metrics: Dict[str, Any]
+    flagged_cases_count: int = 0
+    report_file: str = ""
+    report_markdown: str
+
 
