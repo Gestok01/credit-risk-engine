@@ -49,9 +49,14 @@ FastAPI Service
   ├── Risk band mapping
   ├── Decision rules
   ├── SHAP explainability
-  └── Drift monitoring
-        │
-        └── Audit logs
+  ├── Drift monitoring
+  │     │
+  │     └── Audit logs ──► [Agentic Compliance Auditor]
+  │                              ├── Bias Profiler (disparate impact check)
+  │                              ├── RAG Vector Store (ECOA Reg B search)
+  │                              └── CCO Agent (LLM synthesis & reports)
+  │
+  └── Compliance Endpoints
 
 
 🚀 Live Deployment
@@ -121,6 +126,18 @@ Endpoint
 POST /monitor/retraining-check
 
 Returns a signal indicating whether recent drift patterns suggest that retraining should be considered.
+
+5️⃣ Seed Compliance Vector DB
+Endpoint
+POST /compliance/seed
+
+Seeds the local vector database with federal regulations (Equal Credit Opportunity Act Regulation B).
+
+6️⃣ Agentic Compliance Audit
+Endpoint
+POST /compliance/audit
+
+Runs the multi-agent AI compliance auditor over decision logs to detect systemic bias and flag individual outlier senior rejections. Returns statistical metrics and an audit-ready compliance markdown report.
 
 🧾 Audit & Traceability
 
@@ -215,6 +232,12 @@ scikit-learn
 SHAP
 
 
+ChromaDB & Custom TF-IDF (Vector DB)
+
+
+OpenAI / Ollama (LLM Agents)
+
+
 Docker
 
 
@@ -232,14 +255,27 @@ Pydantic
 credit-risk-engine/
 │
 ├── src/
+│   ├── compliance/       # Pluggable Agentic compliance package
+│   │   ├── config.py     # Central compliance thresholds & configs
+│   │   ├── rules_data.py # ECOA Regulation B statutory text
+│   │   ├── rag_service.py # Primary ChromaDB + fallback vector store
+│   │   ├── bias_profiler.py # Bias analyzer (80% rule & outlier filter)
+│   │   ├── llm_client.py # Pluggable OpenAI/Ollama client
+│   │   └── auditor_agent.py # Orchestrating Chief Compliance Officer agent
+│   │
 │   ├── model.py
 │   ├── services/
 │   ├── schemas.py
 │   ├── config.py
 │   └── main.py
 │
+├── scratch/              # Verification & demo scripts
+│   ├── test_compliance.py # Automated end-to-end verification script
+│   └── demo_api.py       # Live API demonstration script
+│
 ├── notebooks/
 ├── data/
+├── logs/                 # Active audit logs & generated compliance reports
 ├── Dockerfile
 ├── requirements.txt
 ├── credit_risk_pipeline.pkl
